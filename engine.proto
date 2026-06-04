@@ -1,0 +1,28 @@
+syntax = "proto3";
+
+package engine;
+
+service ChessEngine {
+  rpc GetBestMoves (BestMovesRequest) returns (BestMovesResponse);
+}
+
+message BestMovesRequest {
+  string game_id     = 1;
+  string board_state = 2;  // JSON-encoded board
+  string active_color = 3; // "WHITE" or "BLACK"
+}
+
+message SuggestedMove {
+  string piece_position  = 1;
+  string target_position = 2;
+  string move_type       = 3;
+  int32  rank            = 4;  // 1 = best, 2 = second, 3 = third
+  string reasoning       = 5;  // human-readable explanation
+  int32  score           = 6;  // internal evaluation score (centipawns)
+}
+
+message BestMovesResponse {
+  repeated SuggestedMove moves = 1;
+  string active_color          = 2;
+  string error_message         = 3;
+}
